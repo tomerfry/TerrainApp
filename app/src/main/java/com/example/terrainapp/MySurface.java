@@ -8,7 +8,8 @@ public class MySurface extends GLSurfaceView {
 
     public MySurface(Context context) {
         super(context);
-        MyRenderer renderer = new MyRenderer();
+        setEGLContextClientVersion(2);
+        MyRenderer renderer = new MyRenderer(context.getAssets());
         this.setRenderer(renderer);
     }
 
