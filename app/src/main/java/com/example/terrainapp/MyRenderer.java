@@ -42,34 +42,32 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES31.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         this.loader = new Loader();
-        this.mesh = new Mesh(this.loader.loadToVAO(this.squareCoords, this.indices), -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        RawModel model = this.loader.loadToVAO(this.squareCoords, this.indices);
         this.shader = new StaticShader(this.assetManager);
-//        this.world = new World();
+        this.world = new World(model);
 
-
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                world.worldLoop();
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                world.worldLoop();
+            }
+        }).start();
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES31.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
-        Matrix.frustumM(this.projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(this.projectionMatrix, 0, -ratio, ratio, -1, 1, 3f, 1000f);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT);
         GLES31.glClearColor(1, 0, 0, 1);
-//        this.viewMatrix = this.world.getCamera().getViewMatrix();
+        this.viewMatrix = this.world.getCamera().getViewMatrix();
         shader.start();
-        render(this.mesh, this.shader);
+        render(this.world.getMesh(), this.shader);
         shader.stop();
     }
 
@@ -82,6 +80,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         constructTransformationMatrix(mesh);
         shader.loadTransformationMatrix(this.transformationMatrix);
         shader.loadColorVector(vColor);
+        shader.loadViewMatrix(this.viewMatrix);
+        shader.loadProjectionMatrix(this.projectionMatrix);
 
         GLES31.glDrawElements(GLES31.GL_TRIANGLES, rawModel.getVertexCount(), GLES31.GL_UNSIGNED_INT, 0);
         GLES31.glDisableVertexAttribArray(0);

@@ -11,6 +11,8 @@ public class StaticShader extends Shader {
     private static final String VERTEX_FILE = "TerrainVertex.glsl", FRAGMENT_FILE = "TerrainFragment.glsl";
     private int locationTransformationMatrix;
     private int locationColor;
+    private int locationProjectionMatrix;
+    private int locationViewMatrix;
 
     public StaticShader(AssetManager assetManager) {
         super(VERTEX_FILE, FRAGMENT_FILE, assetManager);
@@ -25,6 +27,8 @@ public class StaticShader extends Shader {
     protected void getAllUniformLocations() {
         this.locationTransformationMatrix = super.getUniformLocation("transformationMatrix");
         this.locationColor = super.getUniformLocation("vColor");
+        this.locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
+        this.locationViewMatrix = super.getUniformLocation("viewMatrix");
     }
 
     public void loadTransformationMatrix(float[] transformationMatrix) {
@@ -34,5 +38,15 @@ public class StaticShader extends Shader {
     public void loadColorVector(float[] vColor) {
         super.loadVector4f(this.locationColor, vColor);
     }
+
+    public void loadProjectionMatrix(float[] projectionMatrix) {
+        super.loadMatrix(this.locationProjectionMatrix, projectionMatrix);
+    }
+
+    public void loadViewMatrix(float[] viewMatrix) {
+        super.loadMatrix(this.locationViewMatrix, viewMatrix);
+    }
+
+
 
 }

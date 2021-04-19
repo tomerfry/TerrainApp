@@ -8,9 +8,10 @@ public class World {
     private Camera camera;
     private Mesh mesh;
 
-    public World() {
+    public World(RawModel model) {
         this.working = true;
-        this.camera = new Camera(0.0f, 1.0f, 0.0f, 45f, 0.0f, 0.0f);
+        this.camera = new Camera(0.0f, 4.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+        this.mesh = new Mesh(model, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     public void worldLoop() {
@@ -20,8 +21,7 @@ public class World {
 
         while(this.working) {
             if(currentTime - prevTime >= 100) {
-                Log.i("UPDATE", String.format("worldLoop: Updating world, Camera position: (%f, %f, %f)", this.camera.getX(), this.camera.getY(), this.camera.getZ()));
-                this.camera.setZ((float)(currentTime - firstTime) / 1000);
+                this.camera.setZ((float)(currentTime - firstTime) / 2000);
                 this.camera.updateCamera();
                 prevTime = currentTime;
             }
