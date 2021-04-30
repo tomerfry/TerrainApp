@@ -64,7 +64,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT);
-        GLES31.glClearColor(1, 0, 0, 1);
+        GLES31.glClearColor(0.3f, 0, 0.7f, 0.3f);
         this.viewMatrix = this.world.getCamera().getViewMatrix();
         shader.start();
         render(this.world.getMesh(), this.shader);
